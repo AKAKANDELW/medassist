@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            margin: auto;
+        }
+        h2 {
+            text-align: center;
+            color: #007BFF; /* Blue theme */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        button {
+            margin: 20px 0;
+            padding: 10px 20px;
+            background-color: #007BFF; /* Blue theme */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+        .no-data {
+            text-align: center;
+            color: #999; /* Grey for no data message */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2><i class="fas fa-user-md"></i> Your Lab Results</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Test Date</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody id="lab-results">
+            <!-- Lab results will be populated here -->
+        </tbody>
+    </table>
+
+    <h2><i class="fas fa-prescription-bottle-alt"></i> Your Prescriptions</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Prescription Number</th>
+                <th>Medication</th>
+                <th>Dosage</th>
+                <th>Frequency</th>
+                <th>Duration</th>
+            </tr>
+        </thead>
+        <tbody id="prescriptions">
+            <!-- Prescriptions will be populated here -->
+        </tbody>
+    </table>
+
+    <button id="logoutButton"><i class="fas fa-sign-out-alt"></i> Logout</button>
+</div>
+
+<script>
+    // Simulated patient data based on patient ID
+    const patientData = {
+        '123': {
+            labResults: [
+                { date: '2024-10-14', result: 'High BP' },
+                { date: '2024-10-14', result: 'Heart Problem' }
+            ],
+            prescriptions: [
+                { number: 'RX12345', medication: 'Paracetamol', dosage: '500mg', frequency: 'Twice Daily', duration: '7 Days' },
+                { number: 'PR-001', medication: 'Amoxicillin', dosage: '250mg', frequency: 'Once Daily', duration: '5 Days' }
+            ]
+        },
+        '2019088169': {
+            labResults: [
+                { date: '2024-10-13', result: 'Normal' }
+            ],
+            prescriptions: [
+                { number: 'RX54321', medication: 'Ibuprofen', dosage: '400mg', frequency: 'Three Times a Day', duration: '3 Days' }
+            ]
+        }
+    };
+
+    // Get the patient ID from local storage
+    const patientId = localStorage.getItem('patient_id');
+    const labResultsContainer = document.getElementById('lab-results');
+    const prescriptionsContainer = document.getElementById('prescriptions');
+
+    // Populate the lab results and prescriptions
+    if (patientData[patientId]) {
+        patientData[patientId].labResults.forEach(result => {
+            labResultsContainer.innerHTML += `<tr><td>${result.date}</td><td>${result.result}</td></tr>`;
+        });
+
+        patientData[patientId].prescriptions.forEach(prescription => {
+            prescriptionsContainer.innerHTML += `
+                <tr>
+                    <td>${prescription.number}</td>
+                    <td>${prescription.medication}</td>
+                    <td>${prescription.dosage}</td>
+                    <td>${prescription.frequency}</td>
+                    <td>${prescription.duration}</td>
+                </tr>`;
+        });
+    } else {
+        labResultsContainer.innerHTML = '<tr><td colspan="2" class="no-data">No lab results found.</td></tr>';
+        prescriptionsContainer.innerHTML = '<tr><td colspan="5" class="no-data">No prescriptions found.</td></tr>';
+    }
+
+    // Logout functionality
+    document.getElementById('logoutButton').onclick = function() {
+        localStorage.removeItem('patient_id'); // Clear the patient ID
+        window.location.href = 'login.html'; // Redirect to login page
+    };
+</script>
+
+</body>
+</html>
